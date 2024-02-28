@@ -4,17 +4,13 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 
-DB_POOL_SIZE = 83
-WEB_CONCURRENCY = 9
-POOL_SIZE = max(DB_POOL_SIZE // WEB_CONCURRENCY, 5)
-
 connect_args = {"check_same_thread": False}
 
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=True,
     future=True,
-    pool_size=POOL_SIZE,
+    pool_size=settings.POOL_SIZE,
     max_overflow=64,
 )
 

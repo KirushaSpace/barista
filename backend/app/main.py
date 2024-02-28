@@ -1,19 +1,23 @@
-import uvicorn 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_async_sqlalchemy import SQLAlchemyMiddleware, db
 from sqlmodel import text
 
+from app.core.config import settings
+from app.api.api import api_router
+
+
 app = FastAPI()
+app.include_router(api_router)
 
 
 app.add_middleware(
     SQLAlchemyMiddleware,
-    db_url="postgresql+asyncpg://barista:barista_pass@database:5432",
+    db_url=settings.DATABASE_URL,
     engine_args={
         "echo": False,
         "pool_pre_ping": True,
-        "pool_size": 9,
+        "pool_size": settings.POOL_SIZE,
         "max_overflow": 64,
     },
 )

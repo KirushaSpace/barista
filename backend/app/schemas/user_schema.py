@@ -16,14 +16,6 @@ class UserCreate(UserBase):
         hashed_password = None
 
 
-class UserCreateWithRole(UserBase):
-    password: Optional[str]
-    role_id: Optional[UUID]
-
-    class Config:
-        hashed_password = None
-
-
 class UserUpdate(BaseModel):
     first_name: str
     last_name: str
@@ -34,4 +26,4 @@ class UserRead(UserBase):
     id: UUID
 
     class Config:
-        orm_mode = True
+        from_attributes = True
