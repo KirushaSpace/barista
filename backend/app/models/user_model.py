@@ -12,7 +12,8 @@ class UserBase(SQLModel):
     username: str = Field(
         nullable=True, index=True, sa_column_kwargs={"unique": True}
     )
-    bonus_balance: Optional[float] = Field(default=0)
+    process: Optional[int] = Field(default=0)
+    finish: Optional[int] = Field(default=1)
     role: str = Field(default='user')
 
 
