@@ -10,6 +10,7 @@ class TaskBase(SQLModel):
     text: Optional[str] = Field(nullable=False)
     question: Optional[str] = Field(default=None)
     answers: List[str] = Field(sa_column=Column(JSON), default=None)
+    right_answer: Optional[str] = Field(default=None)
     
 
 class Task(BaseUUIDModel, TaskBase, table=True): 

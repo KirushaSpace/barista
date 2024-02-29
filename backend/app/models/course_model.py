@@ -11,7 +11,10 @@ class CourseBase(SQLModel):
     access: List[str] = Field(sa_column=Column(JSON), default=['user'])
 
 
-class Course(BaseUUIDModel, CourseBase, table=True):  
+class Course(BaseUUIDModel, CourseBase, table=True):
+    user: Optional["User"] = Relationship(
+        back_populates="courses", sa_relationship_kwargs={"lazy": "joined"}
+    )  
     user_id: Optional[UUID] = Field(default=None, foreign_key="User.id")
 
     modules: List["Module"] = Relationship(
