@@ -18,4 +18,5 @@ class Task(BaseUUIDModel, TaskBase, table=True):
         back_populates="tasks", sa_relationship_kwargs={"lazy": "joined"}
     )
     module_id: Optional[UUID] = Field(default=None, foreign_key="Module.id")
+    complete: Optional[bool] = Field(default=False)
     

@@ -24,4 +24,8 @@ class User(BaseUUIDModel, UserBase, table=True):
         back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
     )
 
+    stats: List["Statistic"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+
     

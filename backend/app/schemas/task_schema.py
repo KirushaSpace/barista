@@ -14,3 +14,11 @@ class TaskUpdate(TaskBase):
 class TaskRead(TaskBase):
     id: UUID
     module_id: UUID
+
+
+class TaskStat(TaskBase):
+    comlete: bool
+    id: UUID
+    
+    class Config:
+        exclude = {'title', 'text', 'question', 'answers', 'right_answer'}
