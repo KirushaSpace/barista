@@ -1,14 +1,27 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import select
+from typing import List
 
 from app.api.endpoints import deps
-from app.models import User
+from app.models import User, Module
 from app.crud import module_crud, task_crud
 from app.schemas.role_schema import RoleEnum
 from app.schemas.module_schema import ModuleCreate, ModuleRead, ModuleUpdate
 
 
 router = APIRouter()
+
+
+@router.get("")
+async def get_multi(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(deps.get_current_user(required_roles=[RoleEnum.admin, RoleEnum.user])) 
+):
+    query = select(Module).offset(skip).limit(limit).order_by(Module.id)
+    modules = await module_crud.module.get_multi(query=query)
+    return modules
 
 
 @router.get("/{module_id}")

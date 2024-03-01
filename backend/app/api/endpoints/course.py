@@ -1,14 +1,27 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+from sqlmodel import select
 
 from app.api.endpoints import deps
-from app.models import User
+from app.models import User, Course
 from app.crud import course_crud, module_crud
 from app.schemas.role_schema import RoleEnum
 from app.schemas.course_schema import CourseCreate, CourseRead, CourseUpdate
 
 
 router = APIRouter()
+
+
+@router.get("")
+async def get_multi(
+    skip: int = 0,
+    limit: int = 100, 
+    current_user: User = Depends(deps.get_current_user(required_roles=[RoleEnum.user, RoleEnum.admin]))
+):
+    query = select(Course).offset(skip).limit(limit).order_by(Course.id)
+    courses = await course_crud.course.get_multi(query=query)
+    return courses
 
 
 @router.get("/{course_id}")
