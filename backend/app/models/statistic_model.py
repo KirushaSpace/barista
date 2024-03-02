@@ -7,7 +7,7 @@ from app.models.base_model import BaseUUIDModel
 
 class StatisticBase(SQLModel):
     course_id: Optional[UUID] = Field(default=None)
-    course_stats: Dict[UUID, List["Task"]] = Field(sa_column=Column(JSON), default=None)
+    course_stats: Dict[str, Optional[Dict[str, bool]]] = Field(sa_column=Column(JSON), default=None)
 
 
 class Statistic(BaseUUIDModel, StatisticBase, table=True):

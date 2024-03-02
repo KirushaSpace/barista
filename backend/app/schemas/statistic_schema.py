@@ -12,4 +12,3 @@ class StatisticUpdate(StatisticBase):
 
 class StatisticRead(StatisticBase):
     id: UUID
-    

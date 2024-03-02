@@ -18,7 +18,7 @@ async def get_multi(
     skip: int = 0,
     limit: int = 100,
     current_user: User = Depends(deps.get_current_user(required_roles=[RoleEnum.admin, RoleEnum.user])) 
-):
+) -> List[ModuleRead]:
     query = select(Module).offset(skip).limit(limit).order_by(Module.id)
     modules = await module_crud.module.get_multi(query=query)
     return modules
@@ -27,7 +27,7 @@ async def get_multi(
 @router.get("/{module_id}")
 async def get_module_by_id(
     module_id: UUID,
-    current_user: User = Depends(deps.get_current_user(required_roles=[RoleEnum.admin])),
+    current_user: User = Depends(deps.get_current_user(required_roles=[RoleEnum.admin, RoleEnum.user])),
 ) -> ModuleRead:
     module = await module_crud.module.get(id=module_id)
     if not module:

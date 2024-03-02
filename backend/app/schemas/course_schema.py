@@ -17,3 +17,6 @@ class CourseRead(CourseBase):
     id: UUID
     user_id: UUID
     modules: Optional[List[ModuleRead]] = []
+
+    class Config:
+        from_orm = True
