@@ -15,6 +15,9 @@ class TaskRead(TaskBase):
     id: UUID
     module_id: UUID
 
+    class Config:
+        exclude = {'right_answer'}
+
 
 class TaskStat(TaskBase):
     comlete: bool
