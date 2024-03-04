@@ -5,6 +5,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Input, Modal } from "antd";
 import { Navigate } from "react-router-dom";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ICourse } from "./CoursesListPage";
+import { ICourseStats } from "./CoursePage";
+import { CourseMiniCard } from "../components/CourseMiniCard";
 
 interface IUser {
     first_name: string;
@@ -52,6 +55,12 @@ export function Profile() {
         setIsVisible(false)
     }
 
+    async function fetchStats() {
+        return (await axios.get<ICourseStats[]>('http://localhost:8000/user/statistics', {headers:{Authorization:token}})).data
+    }
+
+    const {data:stats} = useQuery({queryKey: ['user_stats', token], queryFn: fetchStats, enabled: !!token})
+
     if (!token) return <Navigate to={'/signin'}/>
 
     return (
@@ -61,6 +70,10 @@ export function Profile() {
             <h3>{data?.level}</h3>
             <h3>{data?.phone}</h3>
             <Button onClick={()=>setIsVisible(true)}>редактировать</Button>
+            <h3>В процессе:</h3>
+            <div>{stats?.filter(stat=>stat.course_progress < (stat.course_stats["course_count_modules"] as number)).map(stat=><CourseMiniCard key={stat.course_id} id={stat.course_id}/>)}</div>
+            <h3>Выполнены:</h3>
+            <div>{stats?.filter(stat=>stat.course_progress === (stat.course_stats["course_count_modules"] as number)).map(stat=><CourseMiniCard key={stat.course_id} id={stat.course_id}/>)}</div>
             <Modal open={isVisible} onCancel={()=>setIsVisible(false)} footer={null}>
                 <Form onSubmitCapture={handleSubmit(onSubmit)}>
                     <Form.Item>

@@ -10,7 +10,8 @@ import { useSessionStorage } from "../hooks/useSessionStorage"
 
 interface ICheckAnswerResponse {
     "course_id": string
-    "course_stats": {[key:string]:{[key:string]:boolean}}
+    "course_stats": {[key:string]:{[key:string]:boolean|number}|number}
+    "course_progress": number
     id: string
 }
 
@@ -22,7 +23,7 @@ export function Task({answers, question, id, text, title}: ITask) {
     const [userStats, setUserStats] = useSessionStorage('user_stats', '');
     const {moduleId} = useParams<{moduleId: string}>()
 
-    const [isCorrect, setIsCorrect] = useState<-1|0|1>((JSON.parse(userStats!) as ICheckAnswerResponse)?.course_stats[moduleId!][id] ? 1: -1)
+    const [isCorrect, setIsCorrect] = useState<-1|0|1>(((JSON.parse(userStats!) as ICheckAnswerResponse)?.course_stats[moduleId!] as {[key:string]:boolean})[id] ? 1: -1)
     const [[token]] = useContext(AuthContext)
 
     async function checkAnswer(answer: string) {
@@ -34,7 +35,7 @@ export function Task({answers, question, id, text, title}: ITask) {
 
     const {mutate} = useMutation({mutationFn: checkAnswer, onSuccess: (response) => {
         setUserStats(JSON.stringify(response))
-        setIsCorrect((response as ICheckAnswerResponse)?.course_stats[moduleId!][id] ? 1: -1)
+        setIsCorrect(((response as ICheckAnswerResponse)?.course_stats[moduleId!] as {[key:string]:boolean})[id] ? 1: -1)
     }})
 
     const onSubmit: SubmitHandler<ICheckAnswerData> = data => {

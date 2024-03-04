@@ -15,16 +15,17 @@ export interface IModule {
     tasks: ITask[];
 }
 
-interface ICourseStats {
+export interface ICourseStats {
     "course_id": string
-    "course_stats": {[key:string]:{[key:string]:boolean}}
+    "course_stats": {[key:string]:{[key:string]:boolean|number}|number}
+    "course_progress": number
     id: string
 }
 
 export function CoursePage() {
     const [[token]] = useContext(AuthContext)
 
-    const {courseId} = useParams<{courseId: string}>()
+    const {courseId} = useParams<{courseId: string}>()    
 
     async function fetchCourse() {
         return (await axios.get<{course: ICourse, 'user_stat': ICourseStats}>(`http://localhost:8000/course/${courseId}`, 
@@ -45,7 +46,7 @@ export function CoursePage() {
         <div>
             <h1>{data?.course.title}</h1>
             <p>{data?.course.description}</p>
-            {/* <h2>{}</h2> */}
+            <h2>{data?.user_stat.course_progress} / {data?.user_stat.course_stats['course_count_modules'] as number}</h2>
             <div>
                 {data?.course.modules.map(module => <Link to={module.id} key={module.id}>
                     <h3>{module.title}</h3>
