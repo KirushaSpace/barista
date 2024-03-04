@@ -44,19 +44,19 @@ export function SignInPage() {
     if (token) return <Navigate to={'/'}/>
  
     return (
-        <Form onSubmitCapture={handleSubmit(onSubmit)}>
-            <Form.Item>
+        <div className="flex justify-center items-center h-screen bg-gray-200">
+            <Form onSubmitCapture={handleSubmit(onSubmit)} className="bg-white p-8 rounded-lg shadow-md">
                 <Controller
-                        name="username"
-                        control={control}
-                        render={({ field }) => (
-                            <Input
-                                placeholder="username"
-                                allowClear
-                                {...field}
-                            />
-                        )}
-                    />
+                    name="username"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            placeholder="username"
+                            allowClear
+                            {...field}
+                        />
+                    )}
+                />
                 <Controller
                     name="password"
                     control={control}
@@ -72,9 +72,11 @@ export function SignInPage() {
                         />
                     )}
                 />
-            </Form.Item>
-            <Button htmlType="submit">Войти</Button>
-            <Button onClick={()=>navigate('/signup')}>Регистрация</Button>
-        </Form>
+                <div className="flex justify-between">
+                    <Button htmlType="submit">Войти</Button>
+                    <Button onClick={()=>navigate('/signup')}>Регистрация</Button>
+                </div>
+            </Form>
+        </div>
     )
 }

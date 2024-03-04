@@ -10,7 +10,7 @@ import { useSessionStorage } from "../hooks/useSessionStorage"
 
 interface ICheckAnswerResponse {
     "course_id": string
-    "course_stats": {[key:string]:{[key:string]:boolean|number}|number}
+    "course_stats": {[key:string]:{[key:string]:boolean|0|-1|1}|number}
     "course_progress": number
     id: string
 }
@@ -23,7 +23,7 @@ export function Task({answers, question, id, text, title}: ITask) {
     const [userStats, setUserStats] = useSessionStorage('user_stats', '');
     const {moduleId} = useParams<{moduleId: string}>()
 
-    const [isCorrect, setIsCorrect] = useState<-1|0|1>(((JSON.parse(userStats!) as ICheckAnswerResponse)?.course_stats[moduleId!] as {[key:string]:boolean})[id] ? 1: -1)
+    const [isCorrect, setIsCorrect] = useState<-1|0|1>(((JSON.parse(userStats!) as ICheckAnswerResponse)?.course_stats[moduleId!] as {[key:string]:0|1|-1})[id])
     const [[token]] = useContext(AuthContext)
 
     async function checkAnswer(answer: string) {
@@ -43,19 +43,17 @@ export function Task({answers, question, id, text, title}: ITask) {
     }
     
     return (
-        <div>
-            <h3>{title}</h3>
+        <div className="flex flex-col gap-y-2">
+            <h3 className="text-xl">{title}</h3>
             <p>{text}</p>
             <h4>{question}</h4>
             <Form onSubmitCapture={handleSubmit(onSubmit)}>
-                <Form.Item>
-                    <Controller control={control} name="answer" render={({field}) => <Radio.Group {...field} id={id} name="answer">
-                        {answers.map(ans => <Radio disabled={isCorrect === 1} key={ans} value={ans}>{ans}</Radio>)}
-                    </Radio.Group>} />
-                </Form.Item>
+                <Controller control={control} name="answer" render={({field}) => <Radio.Group className="flex flex-col gap-y-2 mb-2" {...field} id={id} name="answer">
+                    {answers.map(ans => <Radio disabled={isCorrect === 1} key={ans} value={ans}>{ans}</Radio>)}
+                </Radio.Group>} />
                 <Button htmlType="submit" disabled={isCorrect === 1}>Ответить</Button>
             </Form>
-            {isCorrect !== 0 && <h3>{isCorrect === 1 ? 'Верно!' : 'Не верно'}</h3>}
+            {isCorrect !== 0 && <h3 className={isCorrect === 1 ? 'text-green-500' : 'text-red-500'}>{isCorrect === 1 ? 'Верно!' : 'Не верно'}</h3>}
         </div>
     )
 }

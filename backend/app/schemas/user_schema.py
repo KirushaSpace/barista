@@ -22,6 +22,10 @@ class UserUpdate(BaseModel):
     phone: Optional[str]
 
 
+class UserUpdateLevel(BaseModel):
+    level: str
+
+
 class UserRead(UserBase):
     id: UUID
 

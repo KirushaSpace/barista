@@ -61,29 +61,47 @@ export function Profile() {
 
     const {data:stats} = useQuery({queryKey: ['user_stats', token], queryFn: fetchStats, enabled: !!token})
 
+    async function levelUp() {
+        return (await axios.patch<IUser>('http://localhost:8000/user/update_level', {level: 'barista'}, {headers:{Authorization: token}})).data
+    }
+
+    const {mutate:updateLevel} = useMutation({mutationFn: levelUp, mutationKey: ['levelup'], onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ['user', token]})
+    }})
+
     if (!token) return <Navigate to={'/signin'}/>
 
     return (
-        <div>
-            <h1>{data?.username}</h1>
-            <h2>{data?.first_name} {data?.last_name}</h2>
-            <h3>{data?.level}</h3>
-            <h3>{data?.phone}</h3>
-            <Button onClick={()=>setIsVisible(true)}>редактировать</Button>
-            <h3>В процессе:</h3>
-            <div>{stats?.filter(stat=>stat.course_progress < (stat.course_stats["course_count_modules"] as number)).map(stat=><CourseMiniCard key={stat.course_id} id={stat.course_id}/>)}</div>
-            <h3>Выполнены:</h3>
-            <div>{stats?.filter(stat=>stat.course_progress === (stat.course_stats["course_count_modules"] as number)).map(stat=><CourseMiniCard key={stat.course_id} id={stat.course_id}/>)}</div>
-            <Modal open={isVisible} onCancel={()=>setIsVisible(false)} footer={null}>
-                <Form onSubmitCapture={handleSubmit(onSubmit)}>
-                    <Form.Item>
-                        <Controller control={control} name="first_name" render={({field}) => <Input placeholder="first_name" {...field}/>} />
-                        <Controller control={control} name="last_name" render={({field}) => <Input placeholder="last_name" {...field}/>} />
-                        <Controller control={control} name="phone" render={({field}) => <Input placeholder="phone" {...field}/>} />
-                    </Form.Item>
-                    <Button htmlType="submit">Сохранить</Button>
-                </Form>
-            </Modal>
+        <div className="flex justify-center items-center h-screen bg-gray-200">
+            <div className="bg-white p-8 rounded-xl shadow-md w-96">
+            <h1 className="text-2xl">{data?.username}</h1>
+            <h2 className="text-xl">{data?.first_name} {data?.last_name}</h2>
+            <div className="mt-4">
+            <h3 className="text-xl">{data?.level}</h3>
+            {stats?.length===stats?.filter(stat=>stat.course_progress === (stat.course_stats["course_count_modules"] as number)).length && data?.level !== 'barista' ? <Button onClick={()=>updateLevel()}>Повысить уровень до barista</Button> : <></>}
+            <h3 className="text-xl mt-4">{data?.phone}</h3>
         </div>
+        
+        <Button className="w-full mt-4" onClick={()=>setIsVisible(true)}>Редактировать</Button>
+        <h3 className="mt-6">В процессе:</h3>
+        <div className="flex flex-col gap-y-6 mt-4">
+            {stats?.filter(stat=>stat.course_progress < (stat.course_stats["course_count_modules"] as number)).map(stat=><CourseMiniCard key={stat.course_id} id={stat.course_id}/>)}
+        </div>
+        <h3>Выполнены:</h3>
+        <div className="flex flex-col gap-y-6 mt-4">
+            {stats?.filter(stat=>stat.course_progress === (stat.course_stats["course_count_modules"] as number)).map(stat=><CourseMiniCard key={stat.course_id} id={stat.course_id}/>)}
+        </div>
+        <Modal open={isVisible} onCancel={()=>setIsVisible(false)} footer={null}>
+            <Form onSubmitCapture={handleSubmit(onSubmit)}>
+                <Form.Item className="flex flex-col gap-y-6 mt-4">
+                    <Controller control={control} name="first_name" render={({field}) => <Input placeholder="Имя" {...field}/>} />
+                    <Controller control={control} name="last_name" render={({field}) => <Input placeholder="Фамилия" {...field}/>} />
+                    <Controller control={control} name="phone" render={({field}) => <Input placeholder="Телефон" {...field}/>} />
+                </Form.Item>
+                <Button htmlType="submit" className="w-full">Сохранить</Button>
+            </Form>
+        </Modal>
+    </div>
+</div>
     )
 }

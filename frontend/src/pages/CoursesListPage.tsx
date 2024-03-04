@@ -28,8 +28,12 @@ export function CoursesListPage() {
     if (!token) return <Navigate to={'/signin'}/>
 
     return (
-        data && <div>
-            {data?.map(({description, id, title}) => <Link key={id} to={`/${id}`}><CourseCard title={title} description={description}/></Link>)}
-            </div>
+        <div className="pl-4">
+            {data?.map(({description, id, title}) => (
+                <Link key={id} to={`/${id}`} className="block mb-4 no-underline">
+                    <CourseCard title={title} description={description}/>
+                </Link>
+            ))}
+        </div>
     )
 }

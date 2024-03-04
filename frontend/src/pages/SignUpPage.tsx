@@ -48,53 +48,52 @@ export function SignUpPage() {
     if (token) return <Navigate to={'/'}/>
  
     return (
-        <Form onSubmitCapture={handleSubmit(onSubmit)}>
-            <Form.Item>
+        <div className="flex justify-center items-center h-screen bg-gray-200">        
+            <Form onSubmitCapture={handleSubmit(onSubmit)} className="bg-white p-8 rounded-lg shadow-md">
                 <Controller
-                        name="first_name"
-                        control={control}
-                        render={({ field }) => (
-                            <Input
-                                placeholder="first_name"
-                                allowClear
-                                {...field}
-                            />
-                        )}
-                    />
+                    name="first_name"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            placeholder="first_name"
+                            allowClear
+                            {...field}
+                        />
+                    )}
+                />
                 <Controller
-                        name="last_name"
-                        control={control}
-                        render={({ field }) => (
-                            <Input
-                                placeholder="last_name"
-                                allowClear
-                                {...field}
-                            />
-                        )}
-                    />
+                    name="last_name"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            placeholder="last_name"
+                            allowClear
+                            {...field}
+                        />
+                    )}
+                />
                 <Controller
-                        name="phone"
-                        control={control}
-                        render={({ field }) => (
-                            <Input
-                                
-                                placeholder="phone"
-                                allowClear
-                                {...field}
-                            />
-                        )}
-                    />
+                    name="phone"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            placeholder="phone"
+                            allowClear
+                            {...field}
+                        />
+                    )}
+                />
                 <Controller
-                        name="username"
-                        control={control}
-                        render={({ field }) => (
-                            <Input
-                                placeholder="username"
-                                allowClear
-                                {...field}
-                            />
-                        )}
-                    />
+                    name="username"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            placeholder="username"
+                            allowClear
+                            {...field}
+                        />
+                    )}
+                />
                 <Controller
                     name="password"
                     control={control}
@@ -110,9 +109,11 @@ export function SignUpPage() {
                         />
                     )}
                 />
-            </Form.Item>
-            <Button htmlType="submit">Зарегистрироваться</Button>
-            <Button onClick={()=>navigate('/singin')}>Вход</Button>
-        </Form>
+                <div className="flex justify-between">
+                    <Button htmlType="submit">Зарегистрироваться</Button>
+                    <Button onClick={()=>navigate('/singin')}>Вход</Button>
+                </div>
+            </Form>
+        </div>
     )
 }

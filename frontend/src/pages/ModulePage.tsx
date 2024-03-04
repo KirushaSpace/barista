@@ -39,14 +39,23 @@ export function ModulePage() {
     if (!token) return <Navigate to={'/signin'}/>
 
     return (
-        <div>
-            <h1>{data?.course.title}</h1>
-            <h2>{module?.title}</h2>
-            <p>{module?.description}</p>
-            <div>{module?.tasks.map(task => <Task key={task.id} {...task}/>)}</div>
-            <Link to={`/${courseId}`}>
-                <Button>К списку модулей</Button>
-            </Link>
+        <div className="font-sans antialiased text-gray-900 mt-28" style={{ marginTop: '60px' }}>
+            <h1 className="text-2xl">{data?.course.title}</h1>
+            <h2 className="text-xl">{module?.title}</h2>
+            <p className="">{module?.description}</p>
+            <div className="mt-4">
+                {module?.tasks.map(task => 
+                <div className="border border-gray-500 shadow-md rounded p-4 mb-4">
+                    <Task key={task.id} {...task}/>
+                </div>
+                )}
+                
+            </div>
+            <div className="flex justify-center mt-4">
+        <Link to={`/${courseId}`}>
+            <Button className="bg-blue-200 text-lg font-bold px-6 py-2 flex items-center">К списку модулей</Button>
+        </Link>
+    </div>
         </div>
     )
 }

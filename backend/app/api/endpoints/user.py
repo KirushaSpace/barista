@@ -11,7 +11,7 @@ from app.crud import user_crud, statistic_crud
 
 from app.models import User, Statistic
 
-from app.schemas.user_schema import UserCreate, UserRead, UserUpdate
+from app.schemas.user_schema import UserCreate, UserRead, UserUpdate, UserUpdateLevel
 from app.schemas.token_schema import TokenRead
 from app.schemas.statistic_schema import StatisticRead
 from app.api.endpoints import deps
@@ -77,6 +77,15 @@ async def get_user_statistics(
 @router.patch("")
 async def update_user(
     new_user: UserUpdate,
+    current_user: User = Depends(deps.get_current_user()),
+) -> UserRead:
+    user_updated = await user_crud.user.update(obj_new=new_user, obj_current=current_user)
+    return user_updated
+
+
+@router.patch("/update_level")
+async def update_user(
+    new_user: UserUpdateLevel,
     current_user: User = Depends(deps.get_current_user()),
 ) -> UserRead:
     user_updated = await user_crud.user.update(obj_new=new_user, obj_current=current_user)
