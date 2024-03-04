@@ -4,6 +4,7 @@ import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import { Button, Form, Input } from "antd";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface ISignInRequest {
     username: string
@@ -23,7 +24,7 @@ async function SignIn(data: ISignInRequest) {
 }
 
 export function SignInPage() {
-    const [, setToken] = useContext(AuthContext)
+    const [token, setToken] = useContext(AuthContext)
     const {mutate} = useMutation({mutationFn: SignIn, onSuccess: ({access_token, token_type})=>{
         setToken(`${token_type} ${access_token}`)
     }});
@@ -36,6 +37,10 @@ export function SignInPage() {
         mutate(data)
         reset()
     }
+
+    const navigate = useNavigate()
+
+    if (token) return <Navigate to={'/'}/>
  
     return (
         <Form onSubmitCapture={handleSubmit(onSubmit)}>
@@ -67,7 +72,8 @@ export function SignInPage() {
                     )}
                 />
             </Form.Item>
-            <Button htmlType="submit">Авторизироваться</Button>
+            <Button htmlType="submit">Войти</Button>
+            <Button onClick={()=>navigate('/signup')}>Регистрация</Button>
         </Form>
     )
 }

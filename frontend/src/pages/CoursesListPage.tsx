@@ -23,12 +23,9 @@ export function CoursesListPage() {
         {headers: { Authorization: token}})).data
     }
 
-    const {data} = useQuery({queryKey: ['courses'], queryFn: fetchCourses, select: (courses) => courses, enabled: !!token})
+    const {data} = useQuery({queryKey: ['courses'], queryFn: fetchCourses, select: (courses) => courses, enabled: !!token})  
 
-    console.log(data);
-    
-
-    if (!token) return <Navigate to={'signin'}/>
+    if (!token) return <Navigate to={'/signin'}/>
 
     return (
         data && <div>

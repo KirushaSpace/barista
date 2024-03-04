@@ -4,6 +4,8 @@ import { Navigate, useParams } from "react-router-dom"
 import axios from "axios"
 import { useQuery } from "@tanstack/react-query"
 import { IModule } from "./CoursePage"
+import { Task } from "../components/Task"
+import { useSessionStorage } from "../hooks/useSessionStorage"
 
 export interface ITask {
     title: string;
@@ -19,8 +21,6 @@ export function ModulePage() {
     const [token] = useContext(AuthContext)
 
     const {moduleId} = useParams<{moduleId: string}>()
-
-    console.log(moduleId);
     
     async function fetchModule() {
         return (await axios.get<IModule>(`http://localhost:8000/module/${moduleId}`, { headers: { Authorization: token }})).data
@@ -28,12 +28,13 @@ export function ModulePage() {
 
     const {data} = useQuery({queryKey: ['course', moduleId], queryFn: fetchModule, enabled: !!token && !!moduleId})
     
-    if(!token) <Navigate to={'signin'}/>
+    if (!token) return <Navigate to={'/signin'}/>
+
     return (
         <div>
             <h1>{data?.title}</h1>
             <p>{data?.description}</p>
-            <div>{data?.tasks.map(task=><h4>{task.title}</h4>)}</div>
+            <div>{data?.tasks.map(task => <Task key={task.id} {...task}/>)}</div>
         </div>
     )
 }
