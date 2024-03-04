@@ -5,7 +5,6 @@ import axios from "axios"
 import { useQuery } from "@tanstack/react-query"
 import { IModule } from "./CoursePage"
 import { Task } from "../components/Task"
-import { useSessionStorage } from "../hooks/useSessionStorage"
 
 export interface ITask {
     title: string;
@@ -18,7 +17,7 @@ export interface ITask {
 }
 
 export function ModulePage() {
-    const [token] = useContext(AuthContext)
+    const [[token]] = useContext(AuthContext)
 
     const {moduleId} = useParams<{moduleId: string}>()
     

@@ -28,7 +28,7 @@ async function SignUp(data: ISignUpRequest) {
 }
 
 export function SignUpPage() {
-    const [token, setToken] = useContext(AuthContext)
+    const [[token, setToken],[_,setUsername]] = useContext(AuthContext)
     const {mutate} = useMutation({mutationFn: SignUp, onSuccess: ({access_token, token_type})=>{
         setToken(`${token_type} ${access_token}`)
     }});
@@ -39,6 +39,7 @@ export function SignUpPage() {
 
     const onSubmit: SubmitHandler<ISignUpRequest> = (data) => {
         mutate(data)
+        setUsername(data.username)
         reset()
     }
 

@@ -22,7 +22,7 @@ interface ICourseStats {
 }
 
 export function CoursePage() {
-    const [token] = useContext(AuthContext)
+    const [[token]] = useContext(AuthContext)
 
     const {courseId} = useParams<{courseId: string}>()
 
@@ -45,6 +45,7 @@ export function CoursePage() {
         <div>
             <h1>{data?.course.title}</h1>
             <p>{data?.course.description}</p>
+            {/* <h2>{}</h2> */}
             <div>
                 {data?.course.modules.map(module => <Link to={module.id} key={module.id}>
                     <h3>{module.title}</h3>

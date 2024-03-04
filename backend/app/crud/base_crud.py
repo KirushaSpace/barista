@@ -92,18 +92,14 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_session: Optional[AsyncSession] = None,
     ) -> ModelType:
         db_session = db_session or self.db.session
-        obj_data = jsonable_encoder(obj_current)
-        print(obj_current)
         for field in obj_new.dict():
             if field == "course_stats":
                 obj_current.course_stats.update(obj_new.course_stats)
                 flag_modified(obj_current, "course_stats")
             else:
                 setattr(obj_current, field, getattr(obj_new, field))
-        print(obj_current)
         await db_session.commit()
         await db_session.refresh(obj_current)
-        print(obj_current)
         return obj_current
 
 

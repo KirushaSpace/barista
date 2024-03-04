@@ -16,7 +16,7 @@ export interface ICourse {
 }
 
 export function CoursesListPage() {
-    const [token] = useContext(AuthContext)
+    const [[token]] = useContext(AuthContext)
 
     async function fetchCourses() {
         return (await axios.get<Pick<ICourse, 'title'|'description'|'id'>[]>('http://localhost:8000/course', 

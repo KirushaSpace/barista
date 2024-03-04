@@ -42,13 +42,17 @@ async def get_course_by_id(
     stat = await statistic_crud.statistic.get_multi(query=query)
     if not stat:
         course_stat = {}
+        course_stat['course_count_modules'] = 0
         for module in course.modules:
+            course_stat['course_count_modules'] += 1
             module_id = module.id
             if module_id not in course_stat:
                 course_stat[str(module_id)] = {}
             for task in module.tasks:
                 task_id = task.id
                 course_stat[str(module_id)][str(task_id)] = False
+            course_stat[str(module_id)]['progress'] = False
+        print(course_stat)
         new_stat = StatisticCreate(course_id=course_id, user_id=current_user.id, course_stats=course_stat) 
         stat = await statistic_crud.statistic.create(obj_in=new_stat)
     else:

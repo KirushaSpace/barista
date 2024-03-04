@@ -91,5 +91,18 @@ async def check_answer(
     cur_stat = cur_stat[0]
     new_stat = copy.copy(cur_stat)
     new_stat.course_stats[str(cur_module.id)][str(cur_task.id)] = cur_task.right_answer == answer_user
+    flag = False
+    del new_stat.course_stats[str(cur_module.id)]['progress']
+    if False not in new_stat.course_stats[str(cur_module.id)].values():
+        flag = True
+    new_stat.course_stats[str(cur_module.id)]['progress'] = flag
+    k = 0
+    for i in new_stat.course_stats:
+        if i != 'course_count_modules':
+            if new_stat.course_stats[i]:
+                if new_stat.course_stats[i]['progress']:
+                    print("i", i)
+                    k += 1
+    new_stat.course_progress += k
     stat_updated = await statistic_crud.statistic.update(obj_new=new_stat, obj_current=cur_stat)
     return stat_updated

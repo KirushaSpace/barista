@@ -8,22 +8,23 @@ import { SignUpPage } from './pages/SignUpPage'
 import { CoursesListPage } from './pages/CoursesListPage'
 import { CoursePage } from './pages/CoursePage'
 import { ModulePage } from './pages/ModulePage'
+import { Profile } from './pages/ProfilePage'
 
 const queryClient = new QueryClient({defaultOptions: {queries: {refetchOnWindowFocus: false}}})
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthContext.Provider value={useSessionStorage('token', '')}>
+      <AuthContext.Provider value={[useSessionStorage('token', ''), useSessionStorage('username', '')]}>
         <BrowserRouter>
           <Routes>
+            <Route path='/signIn' element={<SignInPage/>}/>
+            <Route path='/signUp' element={<SignUpPage/>}/>
             <Route path='/' element={<Layout/>}>
-              <Route path='/signIn' element={<SignInPage/>}/>
-              <Route path='/signUp' element={<SignUpPage/>}/>
               <Route index element={<CoursesListPage/>}/>
               <Route path=':courseId' element={<CoursePage/>}/>
               <Route path=':courseId/:moduleId' element={<ModulePage/>}/>
-              <Route path='/profile' element={<>profile</>}/>
+              <Route path='/profile' element={<Profile/>}/>
             </Route>
           </Routes>
         </BrowserRouter>

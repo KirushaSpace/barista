@@ -1,16 +1,19 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
+from typing import List
+from sqlmodel import select
 
 from app.core import security
 from app.core.config import settings
 
-from app.crud import user_crud
+from app.crud import user_crud, statistic_crud
 
-from app.models import User
+from app.models import User, Statistic
 
 from app.schemas.user_schema import UserCreate, UserRead, UserUpdate
 from app.schemas.token_schema import TokenRead
+from app.schemas.statistic_schema import StatisticRead
 from app.api.endpoints import deps
 
 
@@ -60,6 +63,15 @@ async def get_my_data(
     current_user: User = Depends(deps.get_current_user()),
 ) -> UserRead:
     return current_user
+
+
+@router.get("/statistics")
+async def get_user_statistics(
+    current_user: User = Depends(deps.get_current_user()),
+) -> List[StatisticRead]:
+    query = select(Statistic).where(Statistic.user_id == current_user.id)
+    statistics = await statistic_crud.statistic.get_multi(query=query)
+    return statistics
 
 
 @router.patch("")

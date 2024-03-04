@@ -23,7 +23,7 @@ export function Task({answers, question, id, text, title}: ITask) {
     const {moduleId} = useParams<{moduleId: string}>()
 
     const [isCorrect, setIsCorrect] = useState<-1|0|1>((JSON.parse(userStats!) as ICheckAnswerResponse)?.course_stats[moduleId!][id] ? 1: -1)
-    const [token] = useContext(AuthContext)
+    const [[token]] = useContext(AuthContext)
 
     async function checkAnswer(answer: string) {
         return (await axios.post<ICheckAnswerResponse>(`http://localhost:8000/task/check_ans/${id}?answer_user=${answer}`, {}, 
