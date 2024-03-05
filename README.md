@@ -4,5 +4,5 @@ docker-compose build
 docker-compose run barista_server alembic revision --autogenerate -m "mig"
 docker-compose up
 ```
+![Снимок экрана 2024-03-05 165006](https://github.com/KirushaSpace/barista/assets/82442035/8e7ae4d5-29c4-45cb-ad2a-59e230057970)
 
-![Снимок экрана 2024-02-25 232725](https://github.com/KirushaSpace/barista/assets/82442035/3a20f4e8-ef6d-476f-9292-29281db0bb68)
