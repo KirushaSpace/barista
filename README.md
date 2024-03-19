@@ -10,5 +10,4 @@ docker-compose up
 
 # NEW
 ![image](https://github.com/KirushaSpace/barista/assets/82442035/765e45da-cddc-4e51-97a1-e81fe4c6315f)
-[литературный обзор.docx](https://github.com/KirushaSpace/barista/files/14649167/default.docx)
-
+[литературный обзор.docx](https://github.com/KirushaSpace/barista/files/14650449/default.docx)
